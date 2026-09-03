@@ -18,6 +18,11 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 
+[project.urls]
+Homepage = "https://github.com/liver-detox/FactWindow"
+Repository = "https://github.com/liver-detox/FactWindow"
+Issues = "https://github.com/liver-detox/FactWindow/issues"
+
 [project.scripts]
 factwindow = "factwindow.cli:main"
 
