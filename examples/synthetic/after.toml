@@ -1,0 +1,14 @@
+event_id = "EVT-DEMO-001"
+
+[[facts]]
+metric = "活跃团队数 / active teams"
+actual = 112
+unit = "个团队 / teams"
+source_url = "https://example.com/official-update"
+published_at = "2099-01-15T13:05:00+00:00"
+
+[[facts]]
+metric = "发布状态 / launch status"
+actual = "延期 / delayed"
+source_url = "https://example.com/official-update"
+published_at = "2099-01-15T13:05:00+00:00"
