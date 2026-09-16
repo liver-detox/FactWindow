@@ -13,6 +13,8 @@ FactWindow 是一个用于计划事件的小型本地命令行工具。你可以
 需要 Python 3.11 或更高版本。
 
 ```bash
+git clone https://github.com/liver-detox/FactWindow.git
+cd FactWindow
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install .

@@ -13,6 +13,8 @@ The default demo, CLI guidance, and Markdown report use concise Chinese-first bi
 Requires Python 3.11 or newer.
 
 ```bash
+git clone https://github.com/liver-detox/FactWindow.git
+cd FactWindow
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install .
