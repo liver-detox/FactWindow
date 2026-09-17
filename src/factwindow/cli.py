@@ -9,6 +9,7 @@ from collections.abc import Sequence
 from datetime import datetime
 from pathlib import Path
 
+from . import __version__
 from .core import (
     FactWindowError,
     compare_facts,
@@ -37,6 +38,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Freeze expectations, then compare sourced facts."
         ),
     )
+    parser.add_argument("--version", action="version", version=f"factwindow {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
 
     demo = commands.add_parser(
@@ -101,6 +103,7 @@ def _run_demo(output: Path) -> int:
     )
     (output / "report.md").write_text(render_markdown(report), encoding="utf-8")
     print(f"示例已准备好 / Demo ready: {output / 'report.md'}")
+    print("演示使用固定的 2099 年模拟时间。 / Demo uses a fixed simulated clock in 2099.")
     return 0
 
 

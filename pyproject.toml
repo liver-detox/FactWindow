@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "factwindow"
-version = "0.1.1"
+version = "0.2.0"
 description = "Freeze expectations, then compare sourced facts after an event."
 readme = "README.md"
 requires-python = ">=3.11"

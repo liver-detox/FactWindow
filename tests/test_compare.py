@@ -54,13 +54,15 @@ class CompareTests(unittest.TestCase):
             generated_at=datetime(2040, 1, 15, 14, 0, tzinfo=timezone.utc),
         )
 
-        self.assertEqual(report["schema_version"], "factwindow.report.v1")
+        self.assertEqual(report["schema_version"], "factwindow.report.v2")
         self.assertEqual(
             report["rows"],
             [
                 {
                     "metric": "active_teams",
                     "unit": "teams",
+                    "expectation_unit": "teams",
+                    "fact_unit": "teams",
                     "prior": 80,
                     "expected": 100,
                     "actual": 112,
@@ -130,7 +132,7 @@ class CompareTests(unittest.TestCase):
             generated_at=datetime(2040, 1, 15, 14, 0, tzinfo=timezone.utc),
         )
 
-        self.assertEqual(report["rows"][0]["status"], "changed")
+        self.assertEqual(report["rows"][0]["status"], "type_mismatch")
 
     def test_missing_expected_metric_remains_unresolved(self) -> None:
         after = after_event(
@@ -309,7 +311,7 @@ class CompareTests(unittest.TestCase):
         self.assertIn("# Northstar Labs product update", markdown)
         self.assertIn("Did customer adoption exceed the published target?", markdown)
         self.assertIn(
-            "| active_teams | teams | 80 | 100 | 112 | +12 | 高于预期 / Above expectation |",
+            "| active_teams | teams | teams | 80 | 100 | 112 | +12 | 高于预期 / Above expectation |",
             markdown,
         )
         self.assertIn(

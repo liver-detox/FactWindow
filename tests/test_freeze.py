@@ -42,7 +42,7 @@ class FreezeTests(unittest.TestCase):
 
         snapshot = freeze_before(before, now=now)
 
-        self.assertEqual(snapshot["schema_version"], "factwindow.snapshot.v1")
+        self.assertEqual(snapshot["schema_version"], "factwindow.snapshot.v2")
         self.assertEqual(snapshot["frozen_at"], "2040-01-14T12:00:00+00:00")
         self.assertEqual(snapshot["event"]["event_id"], "EVT-DEMO-001")
         self.assertEqual(snapshot["event"]["expectations"][0]["expected"], 100)
@@ -139,7 +139,7 @@ source_url = "https://example.com/before-event-note"
             write_snapshot(snapshot, snapshot_path)
 
             self.assertTrue(snapshot_path.is_file())
-            self.assertIn('"schema_version": "factwindow.snapshot.v1"', snapshot_path.read_text())
+            self.assertIn('"schema_version": "factwindow.snapshot.v2"', snapshot_path.read_text())
 
     def test_expected_value_must_be_scalar(self) -> None:
         before = before_event()

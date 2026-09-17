@@ -1,4 +1,5 @@
 event_id = "EVT-DEMO-001"
+interpretation = "活跃团队数超过预期，但发布延期；地区分布仍待证据。以上均为虚构演示。 / Active teams exceeded the expectation, but the launch was delayed; regional mix still awaits evidence. This is entirely fictional."
 
 [[facts]]
 metric = "活跃团队数 / active teams"
@@ -12,3 +13,17 @@ metric = "发布状态 / launch status"
 actual = "延期 / delayed"
 source_url = "https://example.com/official-update"
 published_at = "2099-01-15T13:05:00+00:00"
+
+[[answers]]
+question_id = "launch-reason"
+status = "answered"
+reason = "虚构公告说明，发布因兼容性检查尚未完成而延期。 / The fictional announcement says incomplete compatibility checks delayed the launch."
+
+[[answers.sources]]
+source_url = "https://example.com/fictional-launch-note"
+published_at = "2099-01-15T13:05:00+00:00"
+
+[[answers]]
+question_id = "regional-mix"
+status = "pending"
+reason = "虚构公告未披露地区分布，仍待后续资料。 / The fictional announcement does not disclose regional mix; further evidence is needed."

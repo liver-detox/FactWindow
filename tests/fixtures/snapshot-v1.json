@@ -1,0 +1,20 @@
+{
+  "schema_version": "factwindow.snapshot.v1",
+  "frozen_at": "2000-01-31T10:00:00+00:00",
+  "event": {
+    "event_id": "EVT-LEGACY-001",
+    "title": "Fictional service update",
+    "scheduled_at": "2000-02-01T10:00:00+00:00",
+    "question": "Was the published target reached?",
+    "unknowns": [],
+    "expectations": [
+      {
+        "metric": "completed_trials",
+        "expected": 10,
+        "unit": "trials",
+        "source_url": "https://example.com/plan"
+      }
+    ]
+  },
+  "content_sha256": "d6d2e7578d697d99555723f3faa01b5d81d5338a5a97f377d4bb220174d53821"
+}

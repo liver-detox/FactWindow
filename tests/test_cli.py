@@ -26,6 +26,11 @@ def run_cli(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 class CliTests(unittest.TestCase):
+    def test_version_identifies_installed_release(self) -> None:
+        result = run_cli("--version")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), "factwindow 0.2.0")
+
     def test_top_level_and_freeze_help_are_useful(self) -> None:
         top = run_cli("--help")
         freeze = run_cli("freeze", "--help")
@@ -111,7 +116,7 @@ class CliTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("示例已准备好 / Demo ready", result.stdout)
 
-    def test_freeze_and_compare_accept_simple_file_paths(self) -> None:
+    def test_freeze_future_event_but_do_not_compare_before_it(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
             before = root / "before.toml"
@@ -152,11 +157,51 @@ published_at = "2099-02-01T10:05:00+00:00"
 
             self.assertEqual(freeze.returncode, 0, freeze.stderr)
             self.assertTrue(snapshot.is_file())
-            self.assertEqual(compare.returncode, 0, compare.stderr)
-            self.assertTrue((report_dir / "report.md").is_file())
-            self.assertTrue((report_dir / "report.json").is_file())
+            self.assertEqual(compare.returncode, 2, compare.stderr)
+            self.assertIn("generated_at", compare.stderr)
+            self.assertFalse(report_dir.exists())
             self.assertIn("预期已固定 / Expectations frozen", freeze.stdout)
-            self.assertIn("对照报告已生成 / Comparison ready", compare.stdout)
+
+    def test_compare_reads_a_snapshot_created_by_version_011(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            after = root / "after.toml"
+            after.write_text('''event_id = "EVT-LEGACY-001"
+[[facts]]
+metric = "completed_trials"
+actual = 12
+unit = "trials"
+source_url = "https://example.com/result"
+published_at = "2000-02-01T10:05:00+00:00"
+''', encoding="utf-8")
+            output = root / "report"
+            result = run_cli("compare", str(ROOT / "tests/fixtures/snapshot-v1.json"),
+                             str(after), "--output", str(output))
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads((output / "report.json").read_text())
+            self.assertEqual(report["schema_version"], "factwindow.report.v2")
+            self.assertEqual(report["rows"][0]["difference"], 2)
+            self.assertIn("对照报告已生成 / Comparison ready", result.stdout)
+
+    def test_future_source_is_rejected_without_creating_report(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            after = root / "after.toml"
+            after.write_text('''event_id = "EVT-LEGACY-001"
+[[facts]]
+metric = "completed_trials"
+actual = 12
+unit = "trials"
+source_url = "https://example.com/result"
+published_at = "2099-02-01T10:05:00+00:00"
+''', encoding="utf-8")
+            output = root / "report"
+            result = run_cli("compare", str(ROOT / "tests/fixtures/snapshot-v1.json"),
+                             str(after), "--output", str(output))
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("published_at", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
+            self.assertFalse(output.exists())
 
     def test_malformed_toml_has_short_actionable_error(self) -> None:
         with TemporaryDirectory() as directory:
